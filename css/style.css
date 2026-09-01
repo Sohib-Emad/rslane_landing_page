@@ -984,8 +984,8 @@ body {
 
 .footer-container {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1.2fr;
-    gap: 3rem;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
     padding-bottom: 3.5rem;
 }
 
