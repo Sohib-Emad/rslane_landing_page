@@ -31,25 +31,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Phone Mockup Image Slideshow
+    // 3. Phone Mockup Image Slideshow (Screens 1 to 7 in order)
     const heroScreenImg = document.getElementById('heroScreenImg');
     const screens = [
-        'assets/images/banner-history-1.jpg',
-        'assets/images/banner-history-2.jpg',
-        'assets/images/banner-geography-1.jpg',
-        'assets/images/banner-geography-2.jpg'
+        'assets/screens/1.png',
+        'assets/screens/2.png',
+        'assets/screens/3.png',
+        'assets/screens/4.png',
+        'assets/screens/5.png',
+        'assets/screens/6.png',
+        'assets/screens/7.png'
     ];
     let currentScreenIndex = 0;
+    const dots = document.querySelectorAll('.p-dot');
+
+    // Preload images for instant switching
+    screens.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+
+    function updateScreen(index) {
+        if (!heroScreenImg) return;
+        currentScreenIndex = index;
+        heroScreenImg.style.opacity = '0';
+        setTimeout(() => {
+            heroScreenImg.src = screens[currentScreenIndex];
+            heroScreenImg.style.opacity = '1';
+        }, 220);
+
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentScreenIndex);
+        });
+    }
+
+    let slideInterval;
+    function startSlideTimer() {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(() => {
+            const nextIndex = (currentScreenIndex + 1) % screens.length;
+            updateScreen(nextIndex);
+        }, 3200);
+    }
 
     if (heroScreenImg) {
-        setInterval(() => {
-            currentScreenIndex = (currentScreenIndex + 1) % screens.length;
-            heroScreenImg.style.opacity = '0';
-            setTimeout(() => {
-                heroScreenImg.src = screens[currentScreenIndex];
-                heroScreenImg.style.opacity = '1';
-            }, 300);
-        }, 4000);
+        startSlideTimer();
+
+        dots.forEach((dot, idx) => {
+            dot.addEventListener('click', () => {
+                updateScreen(idx);
+                startSlideTimer(); // reset interval on user click
+            });
+        });
     }
 
     // 4. FAQ Accordion
